@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as userApi from "./api/userApi";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -9,7 +10,17 @@ function Login() {
   // const email = useState[0];
   // const setEmail = useState[1];
 
-  function handleLogin(event) {}
+  function handleLogin(event) {
+    event.preventDefault();
+    userApi
+      .login(email, password)
+      .then(user => {
+        alert("valid");
+      })
+      .catch(error => {
+        alert("Invalid credentials.");
+      });
+  }
 
   return (
     <form onSubmit={handleLogin}>
