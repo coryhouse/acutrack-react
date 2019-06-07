@@ -1,7 +1,11 @@
 import React from "react";
 import * as userApi from "./api/userApi";
+import i18n from "./i18n";
+import LanguageContext from "./LanguageContext";
 
 class Login extends React.Component {
+  static contextType = LanguageContext;
+
   state = {
     email: "",
     password: ""
@@ -20,10 +24,11 @@ class Login extends React.Component {
   };
 
   render() {
+    const language = this.context;
     return (
       <form onSubmit={this.handleLogin}>
         <div>
-          <label>Email</label>
+          <label>{i18n[language].emailLabel}</label>
           <br />
           <input
             type="email"
