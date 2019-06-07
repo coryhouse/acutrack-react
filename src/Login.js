@@ -1,50 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
 import * as userApi from "./api/userApi";
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+class Login extends React.Component {
+  state = {
+    email: "",
+    password: ""
+  };
 
-  // this is equivalent to the code above.
-  // const emailState = useState("");
-  // const email = useState[0];
-  // const setEmail = useState[1];
-
-  function handleLogin(event) {
+  handleLogin = event => {
     event.preventDefault();
     userApi
-      .login(email, password)
+      .login(this.state.email, this.state.password)
       .then(user => {
         alert("valid");
       })
       .catch(error => {
         alert("Invalid credentials.");
       });
-  }
+  };
 
-  return (
-    <form onSubmit={handleLogin}>
-      <div>
-        <label>Email</label>
-        <br />
-        <input
-          type="email"
-          onChange={event => setEmail(event.target.value)}
-          value={email}
-        />
-      </div>
-      <div>
-        <label>Password</label>
-        <br />
-        <input
-          type="password"
-          onChange={event => setPassword(event.target.value)}
-          value={password}
-        />
-      </div>
-      <input type="submit" value="Login" />
-    </form>
-  );
+  render() {
+    return (
+      <form onSubmit={this.handleLogin}>
+        <div>
+          <label>Email</label>
+          <br />
+          <input
+            type="email"
+            onChange={event => this.setState({ email: event.target.value })}
+            value={this.state.email}
+          />
+        </div>
+        <div>
+          <label>Password</label>
+          <br />
+          <input
+            type="password"
+            onChange={event => this.setState({ password: event.target.value })}
+            value={this.state.password}
+          />
+        </div>
+        <input type="submit" value="Login" />
+      </form>
+    );
+  }
 }
 
 export default Login;
