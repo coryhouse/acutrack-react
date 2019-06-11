@@ -14,8 +14,9 @@ class TextInput extends React.Component {
           onBlur={this.props.onBlur}
           onChange={this.props.onChange}
           value={this.props.value}
+          required={this.props.required}
         />
-        <p>{this.props.error}</p>
+        {this.props.error && <p style={{ color: "red" }}>{this.props.error}</p>}
       </div>
     );
   }
@@ -29,7 +30,13 @@ TextInput.propTypes = {
   value: PropTypes.string.isRequired,
   onBlur: PropTypes.func,
   onChange: PropTypes.func.isRequired,
+  required: PropTypes.bool,
   error: PropTypes.string
+};
+
+TextInput.defaultProps = {
+  required: false,
+  error: ""
 };
 
 export default TextInput;
