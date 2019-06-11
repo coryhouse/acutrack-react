@@ -8,7 +8,9 @@ class Login extends React.Component {
 
   state = {
     email: "",
-    password: ""
+    password: "",
+    emailError: "",
+    passwordError: ""
   };
 
   handleLogin = event => {
@@ -23,27 +25,42 @@ class Login extends React.Component {
       });
   };
 
+  handleBlur = event => {
+    const { name } = event.target;
+    this.setState({
+      [name + "Error"]: this.state[name] === "" ? `${name} is required.` : ""
+    });
+  };
+
   render() {
     const language = this.context;
     return (
       <form onSubmit={this.handleLogin}>
         <div>
-          <label>{i18n[language].emailLabel}</label>
+          <label htmlFor="email">{i18n[language].emailLabel}</label>
           <br />
           <input
+            id="email"
             type="email"
+            name="email"
+            onBlur={this.handleBlur}
             onChange={event => this.setState({ email: event.target.value })}
             value={this.state.email}
           />
+          <p>{this.state.emailError}</p>
         </div>
         <div>
-          <label>Password</label>
+          <label htmlFor="password">Password</label>
           <br />
           <input
+            id="password"
             type="password"
+            name="password"
+            onBlur={this.handleBlur}
             onChange={event => this.setState({ password: event.target.value })}
             value={this.state.password}
           />
+          <p>{this.state.passwordError}</p>
         </div>
         <input type="submit" value="Login" />
       </form>
