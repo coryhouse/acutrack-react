@@ -2,5 +2,6 @@
   "users": [
     { "id": 1, "email": "test@ex.com", "password": "123" },
     { "id": 2, "email": "test2@ex.com", "password": "123" }
-  ]
+  ],
+  "vehicles": [{ "id": 1, "make": "Ford", "model": "Edge" }]
 }
