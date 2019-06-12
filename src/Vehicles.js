@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getVehicles } from "./api/vehicleApi";
+import { getVehicles, deleteVehicle } from "./api/vehicleApi";
+import { Link } from "react-router-dom";
 
 function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
@@ -11,25 +12,55 @@ function Vehicles() {
     });
   }, []);
 
+  function handleDelete(vehicleId) {
+    // Call api to delete
+    deleteVehicle(vehicleId).then(() => {
+      // the call to delete has been completed.
+      // Remove the vehicle from our local state
+      const newVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
+      setVehicles(newVehicles);
+    });
+  }
+
+  function renderHeader() {
+    const noVehiclesMessage =
+      vehicles.length === 0 ? <p>No vehicles found.</p> : null;
+
+    return (
+      <>
+        <h1>Vehicles</h1> <Link to="/vehicle">Add Vehicle</Link>
+        {noVehiclesMessage}
+      </>
+    );
+  }
+
   return (
     <>
-      <h1>Vehicles</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Make</th>
-            <th>Model</th>
-          </tr>
-        </thead>
-        <tbody>
-          {vehicles.map(vehicle => (
+      {renderHeader()}
+      {vehicles.length > 0 && (
+        <table>
+          <thead>
             <tr>
-              <td>{vehicle.make}</td>
-              <td>{vehicle.model}</td>
+              <th />
+              <th>Make</th>
+              <th>Model</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {vehicles.map(vehicle => (
+              <tr>
+                <td>
+                  <button onClick={() => handleDelete(vehicle.id)}>
+                    Delete
+                  </button>
+                </td>
+                <td>{vehicle.make}</td>
+                <td>{vehicle.model}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   );
 }

@@ -5,6 +5,7 @@ import { Route } from "react-router-dom";
 import Home from "./Home";
 import Nav from "./Nav";
 import Vehicles from "./Vehicles";
+import ManageVehicle from "./ManageVehicle";
 
 class App extends React.Component {
   state = {
@@ -24,6 +25,7 @@ class App extends React.Component {
         <Nav />
         <Route path="/" component={Home} exact />
         <Route path="/login" component={Login} />
+        <Route path="/vehicle" component={ManageVehicle} />
         <Route path="/vehicles" component={Vehicles} />
       </LanguageContext.Provider>
     );
