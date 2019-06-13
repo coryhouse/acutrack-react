@@ -1,21 +1,46 @@
 import React, { useState } from "react";
 import TextInput from "./TextInput";
+import { saveVehicle } from "./api/vehicleApi";
+// import produce from "immer";
+import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 
-function ManageVehicle() {
+function ManageVehicle(props) {
   const [vehicle, setVehicle] = useState({
     make: "",
     model: ""
   });
 
-  function handleChange(event) {
-    const newValue = event.target.value;
-    const vehicleCopy = { ...vehicle };
-    vehicleCopy[event.target.name] = newValue;
-    setVehicle(vehicleCopy);
+  const [errors, setErrors] = useState({});
+
+  function handleChange({ target }) {
+    // const newVehicle = produce(vehicle, draftState => {
+    //   // draftState is a copy of the vehicle that we can mutate
+    //   draftState[target.name] = target.value;
+    // });
+    // setVehicle(newVehicle);
+    setVehicle({ ...vehicle, [target.name]: target.value });
+  }
+
+  function isValid() {
+    const _errors = {};
+    if (!vehicle.make) _errors.make = "Make is required.";
+    if (!vehicle.model) _errors.model = "Model is required.";
+    setErrors(_errors);
+    return Object.keys(_errors).length === 0;
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (!isValid()) return;
+    saveVehicle(vehicle).then(savedVehicle => {
+      props.history.push("/vehicles");
+      toast.success("Vehicle saved.");
+    });
   }
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <h1>Manage Vehicle</h1>
       <TextInput
         label="Make"
@@ -23,9 +48,25 @@ function ManageVehicle() {
         name="make"
         value={vehicle.make}
         onChange={handleChange}
+        error={errors.make}
       />
+
+      <TextInput
+        label="Model"
+        id="model"
+        name="model"
+        value={vehicle.model}
+        onChange={handleChange}
+        error={errors.model}
+      />
+
+      <input type="submit" value="Save Vehicle" />
     </form>
   );
 }
+
+ManageVehicle.propTypes = {
+  history: PropTypes.object.isRequired
+};
 
 export default ManageVehicle;

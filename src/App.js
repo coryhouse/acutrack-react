@@ -6,6 +6,8 @@ import Home from "./Home";
 import Nav from "./Nav";
 import Vehicles from "./Vehicles";
 import ManageVehicle from "./ManageVehicle";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 class App extends React.Component {
   state = {
@@ -20,6 +22,7 @@ class App extends React.Component {
   render() {
     return (
       <LanguageContext.Provider value={this.state.language}>
+        <ToastContainer autoClose={5000} />
         <label>Language:</label> {this.state.language}
         <button onClick={this.toggleLanguage}>Toggle</button>
         <Nav />

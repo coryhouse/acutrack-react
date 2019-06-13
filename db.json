@@ -11,5 +11,26 @@
       "password": "123"
     }
   ],
-  "vehicles": []
+  "vehicles": [
+    {
+      "make": "Nissan",
+      "model": "Leaf",
+      "id": 3
+    },
+    {
+      "make": "Infiniti",
+      "model": "M35",
+      "id": 4
+    },
+    {
+      "make": "Chevy ",
+      "model": "Sonic",
+      "id": 5
+    },
+    {
+      "make": "",
+      "model": "",
+      "id": 6
+    }
+  ]
 }

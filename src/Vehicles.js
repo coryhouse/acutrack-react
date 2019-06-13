@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getVehicles, deleteVehicle } from "./api/vehicleApi";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
@@ -19,6 +20,7 @@ function Vehicles() {
       // Remove the vehicle from our local state
       const newVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
       setVehicles(newVehicles);
+      toast.success("Vehicle deleted.");
     });
   }
 
@@ -48,7 +50,7 @@ function Vehicles() {
           </thead>
           <tbody>
             {vehicles.map(vehicle => (
-              <tr>
+              <tr key={vehicle.id}>
                 <td>
                   <button onClick={() => handleDelete(vehicle.id)}>
                     Delete
