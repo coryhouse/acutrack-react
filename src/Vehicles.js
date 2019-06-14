@@ -56,8 +56,12 @@ function Vehicles() {
                     Delete
                   </button>
                 </td>
-                <td>{vehicle.make}</td>
-                <td>{vehicle.model}</td>
+                <td>
+                  <Link to={`/vehicle/${vehicle.id}`}>{vehicle.make}</Link>
+                </td>
+                <td>
+                  <Link to={`vehicle/${vehicle.id}`}>{vehicle.model}</Link>
+                </td>
               </tr>
             ))}
           </tbody>

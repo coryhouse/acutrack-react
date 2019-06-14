@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextInput from "./TextInput";
-import { saveVehicle } from "./api/vehicleApi";
+import { saveVehicle, getVehicle } from "./api/vehicleApi";
 // import produce from "immer";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
@@ -12,6 +12,14 @@ function ManageVehicle(props) {
   });
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    const { vehicleId } = props.match.params;
+    getVehicle(vehicleId).then(_vehicle => {
+      // Set vehicle if we received one, otherwise redirect to 404 page.
+      _vehicle ? setVehicle(_vehicle) : props.history.push("/404");
+    });
+  }, [props.history, props.match.params]);
 
   function handleChange({ target }) {
     // const newVehicle = produce(vehicle, draftState => {
@@ -66,7 +74,8 @@ function ManageVehicle(props) {
 }
 
 ManageVehicle.propTypes = {
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired
 };
 
 export default ManageVehicle;

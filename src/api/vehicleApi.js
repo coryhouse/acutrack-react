@@ -8,6 +8,16 @@ export function getVehicles() {
   });
 }
 
+export function getVehicle(vehicleId) {
+  return fetch("http://localhost:3001/vehicles/" + vehicleId).then(response => {
+    if (response.ok)
+      return response.json().catch(error => {
+        console.error(error);
+        throw error;
+      });
+  });
+}
+
 export function deleteVehicle(vehicleId) {
   return fetch("http://localhost:3001/vehicles/" + vehicleId, {
     method: "DELETE"
