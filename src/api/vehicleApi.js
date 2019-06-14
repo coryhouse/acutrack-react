@@ -31,10 +31,10 @@ export function deleteVehicle(vehicleId) {
 }
 
 export function saveVehicle(vehicle) {
-  return fetch("http://localhost:3001/vehicles", {
+  return fetch("http://localhost:3001/vehicles/" + vehicle.id || "", {
     body: JSON.stringify(vehicle),
     headers: { "content-type": "application/json" },
-    method: "POST"
+    method: vehicle.id ? "PUT" : "POST"
   }).then(response => {
     if (!response.ok) throw new Error("Network response was not okay.");
     return response.json().catch(error => {
