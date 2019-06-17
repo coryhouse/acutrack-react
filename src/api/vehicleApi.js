@@ -31,7 +31,10 @@ export function deleteVehicle(vehicleId) {
 }
 
 export function saveVehicle(vehicle) {
-  return fetch("http://localhost:3001/vehicles/" + vehicle.id || "", {
+  const url = vehicle.id
+    ? "http://localhost:3001/vehicles/" + vehicle.id
+    : "http://localhost:3001/vehicles/";
+  return fetch(url, {
     body: JSON.stringify(vehicle),
     headers: { "content-type": "application/json" },
     method: vehicle.id ? "PUT" : "POST"

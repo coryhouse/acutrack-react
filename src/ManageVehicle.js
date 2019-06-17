@@ -4,6 +4,7 @@ import { saveVehicle, getVehicle } from "./api/vehicleApi";
 // import produce from "immer";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import Loading from "./Loading";
 
 function ManageVehicle(props) {
   const [vehicle, setVehicle] = useState({
@@ -12,13 +13,19 @@ function ManageVehicle(props) {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const { vehicleId } = props.match.params;
-    getVehicle(vehicleId).then(_vehicle => {
-      // Set vehicle if we received one, otherwise redirect to 404 page.
-      _vehicle ? setVehicle(_vehicle) : props.history.push("/404");
-    });
+    if (vehicleId) {
+      setIsLoading(true);
+      getVehicle(vehicleId).then(_vehicle => {
+        // Set vehicle if we received one, otherwise redirect to 404 page.
+        _vehicle ? setVehicle(_vehicle) : props.history.push("/404");
+        setIsLoading(false);
+      });
+    }
   }, [props.history, props.match.params]);
 
   function handleChange({ target }) {
@@ -41,6 +48,7 @@ function ManageVehicle(props) {
   function handleSubmit(event) {
     event.preventDefault();
     if (!isValid()) return;
+    setIsSaving(true);
     saveVehicle(vehicle).then(savedVehicle => {
       props.history.push("/vehicles");
       toast.success("Vehicle saved.");
@@ -50,25 +58,35 @@ function ManageVehicle(props) {
   return (
     <form onSubmit={handleSubmit}>
       <h1>Manage Vehicle</h1>
-      <TextInput
-        label="Make"
-        id="make"
-        name="make"
-        value={vehicle.make}
-        onChange={handleChange}
-        error={errors.make}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <TextInput
+            label="Make"
+            id="make"
+            name="make"
+            value={vehicle.make}
+            onChange={handleChange}
+            error={errors.make}
+          />
 
-      <TextInput
-        label="Model"
-        id="model"
-        name="model"
-        value={vehicle.model}
-        onChange={handleChange}
-        error={errors.model}
-      />
+          <TextInput
+            label="Model"
+            id="model"
+            name="model"
+            value={vehicle.model}
+            onChange={handleChange}
+            error={errors.model}
+          />
 
-      <input type="submit" value="Save Vehicle" />
+          <input
+            type="submit"
+            disabled={isSaving}
+            value={isSaving ? "Saving..." : "Save Vehicle"}
+          />
+        </>
+      )}
     </form>
   );
 }

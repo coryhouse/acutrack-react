@@ -17,14 +17,20 @@ function Vehicles() {
   }, []);
 
   function handleDelete(vehicleId) {
-    // Call api to delete
-    deleteVehicle(vehicleId).then(() => {
-      // the call to delete has been completed.
-      // Remove the vehicle from our local state
-      const newVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
-      setVehicles(newVehicles);
-      toast.success("Vehicle deleted.");
-    });
+    // Optimistic delete. Assuming the delete will succeed.
+    const vehiclesCopy = [...vehicles];
+    const newVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
+    // This is an async call. React sets state in an async manner. Set state sometime in the near future.
+    setVehicles(newVehicles);
+    toast.info("Vehicle delete in progress...");
+    deleteVehicle(vehicleId)
+      .then(() => {
+        toast.success("Vehicle deleted");
+      })
+      .catch(error => {
+        setVehicles([...vehiclesCopy]);
+        toast.error("Oops. Delete failed. Error:" + error.message);
+      });
   }
 
   function renderHeader() {
