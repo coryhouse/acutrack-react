@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "run-p start:api start:app",
-    "start:api": "json-server --watch db.json --port 3001",
+    "start:api": "json-server --watch db.json --port 3001 --delay 2000",
     "start:app": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

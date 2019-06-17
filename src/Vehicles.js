@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { getVehicles, deleteVehicle } from "./api/vehicleApi";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loading from "./Loading";
 
 function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // This is equivalent to componentDidMount
   useEffect(() => {
     getVehicles().then(_vehicles => {
       setVehicles(_vehicles);
+      setIsLoading(false);
     });
   }, []);
 
@@ -35,6 +38,8 @@ function Vehicles() {
       </>
     );
   }
+
+  if (isLoading) return <Loading />;
 
   return (
     <>
