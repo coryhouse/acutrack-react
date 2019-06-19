@@ -45,12 +45,16 @@ function App(props) {
   function handleSave(vehicle) {
     setIsSaving(true);
     return saveVehicle(vehicle).then(savedVehicle => {
-      // Iterate over vehicles, and replace the savedVehicle in the array.
-      const updatedVehicles = vehicles.map(vehicle =>
-        vehicle.id === savedVehicle.id ? savedVehicle : vehicle
-      );
+      if (vehicle.id) {
+        // Iterate over vehicles, and replace the savedVehicle in the array.
+        const updatedVehicles = vehicles.map(vehicle =>
+          vehicle.id === savedVehicle.id ? savedVehicle : vehicle
+        );
+        setVehicles(updatedVehicles);
+      } else {
+        setVehicles([...vehicles, savedVehicle]);
+      }
       setIsSaving(false);
-      setVehicles(updatedVehicles);
       toast.success("Vehicle saved.");
     });
   }

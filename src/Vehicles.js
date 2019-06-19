@@ -54,7 +54,7 @@ function Vehicles(props) {
 }
 
 Vehicles.propTypes = {
-  loading: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
   vehicles: PropTypes.array.isRequired
 };
