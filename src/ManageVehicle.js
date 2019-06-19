@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TextInput from "./TextInput";
-import { saveVehicle, getVehicle } from "./api/vehicleApi";
 // import produce from "immer";
 import PropTypes from "prop-types";
-import { toast } from "react-toastify";
 import Loading from "./Loading";
 
 function ManageVehicle(props) {
@@ -13,20 +11,17 @@ function ManageVehicle(props) {
   });
 
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const { vehicleId } = props.match.params;
     if (vehicleId) {
-      setIsLoading(true);
-      getVehicle(vehicleId).then(_vehicle => {
-        // Set vehicle if we received one, otherwise redirect to 404 page.
-        _vehicle ? setVehicle(_vehicle) : props.history.push("/404");
-        setIsLoading(false);
-      });
+      // Set vehicle if we received one, otherwise redirect to 404 page.
+      const _vehicle = props.vehicles.find(
+        vehicle => vehicle.id === parseInt(vehicleId)
+      );
+      _vehicle ? setVehicle(_vehicle) : props.history.push("/404");
     }
-  }, [props.history, props.match.params]);
+  }, [props.history, props.match.params, props.vehicles]);
 
   function handleChange({ target }) {
     // const newVehicle = produce(vehicle, draftState => {
@@ -45,20 +40,18 @@ function ManageVehicle(props) {
     return Object.keys(_errors).length === 0;
   }
 
-  function handleSubmit(event) {
+  function handleSave(event) {
     event.preventDefault();
-    if (!isValid()) return;
-    setIsSaving(true);
-    saveVehicle(vehicle).then(savedVehicle => {
-      props.history.push("/vehicles");
-      toast.success("Vehicle saved.");
-    });
+    if (isValid())
+      props.onSave(vehicle).then(() => {
+        props.history.push("/vehicles");
+      });
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSave}>
       <h1>Manage Vehicle</h1>
-      {isLoading ? (
+      {props.isLoading ? (
         <Loading />
       ) : (
         <>
@@ -82,8 +75,8 @@ function ManageVehicle(props) {
 
           <input
             type="submit"
-            disabled={isSaving}
-            value={isSaving ? "Saving..." : "Save Vehicle"}
+            disabled={props.isSaving}
+            value={props.isSaving ? "Saving..." : "Save Vehicle"}
           />
         </>
       )}
@@ -92,6 +85,9 @@ function ManageVehicle(props) {
 }
 
 ManageVehicle.propTypes = {
+  isSaving: PropTypes.bool.isRequired,
+  onSave: PropTypes.func.isRequired,
+  vehicles: PropTypes.array.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired
 };

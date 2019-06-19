@@ -1,41 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { getVehicles, deleteVehicle } from "./api/vehicleApi";
+import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import Loading from "./Loading";
 
-function Vehicles() {
-  const [vehicles, setVehicles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // This is equivalent to componentDidMount
-  useEffect(() => {
-    getVehicles().then(_vehicles => {
-      setVehicles(_vehicles);
-      setIsLoading(false);
-    });
-  }, []);
-
-  function handleDelete(vehicleId) {
-    // Optimistic delete. Assuming the delete will succeed.
-    const vehiclesCopy = [...vehicles];
-    const newVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
-    // This is an async call. React sets state in an async manner. Set state sometime in the near future.
-    setVehicles(newVehicles);
-    toast.info("Vehicle delete in progress...");
-    deleteVehicle(vehicleId)
-      .then(() => {
-        toast.success("Vehicle deleted");
-      })
-      .catch(error => {
-        setVehicles([...vehiclesCopy]);
-        toast.error("Oops. Delete failed. Error:" + error.message);
-      });
-  }
-
+function Vehicles(props) {
   function renderHeader() {
     const noVehiclesMessage =
-      vehicles.length === 0 ? <p>No vehicles found.</p> : null;
+      props.vehicles.length === 0 ? <p>No vehicles found.</p> : null;
 
     return (
       <>
@@ -45,12 +16,12 @@ function Vehicles() {
     );
   }
 
-  if (isLoading) return <Loading />;
+  if (props.isLoading) return <Loading />;
 
   return (
     <>
       {renderHeader()}
-      {vehicles.length > 0 && (
+      {props.vehicles.length > 0 && (
         <table>
           <thead>
             <tr>
@@ -60,10 +31,10 @@ function Vehicles() {
             </tr>
           </thead>
           <tbody>
-            {vehicles.map(vehicle => (
+            {props.vehicles.map(vehicle => (
               <tr key={vehicle.id}>
                 <td>
-                  <button onClick={() => handleDelete(vehicle.id)}>
+                  <button onClick={() => props.onDeleteClick(vehicle.id)}>
                     Delete
                   </button>
                 </td>
@@ -81,5 +52,11 @@ function Vehicles() {
     </>
   );
 }
+
+Vehicles.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  onDeleteClick: PropTypes.func.isRequired,
+  vehicles: PropTypes.array.isRequired
+};
 
 export default Vehicles;
