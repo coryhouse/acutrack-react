@@ -42,10 +42,11 @@ function ManageVehicle(props) {
 
   function handleSave(event) {
     event.preventDefault();
-    if (isValid())
+    if (isValid()) {
       props.onSave(vehicle).then(() => {
         props.history.push("/vehicles");
       });
+    }
   }
 
   return (

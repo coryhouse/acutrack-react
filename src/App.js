@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
+import { vehicleReducer } from "./vehicleReducer";
 import Login from "./Login";
 import LanguageContext from "./LanguageContext";
 import { Route, Switch } from "react-router-dom";
@@ -12,7 +13,7 @@ import PageNotFound from "./PageNotFound";
 import { getVehicles, deleteVehicle, saveVehicle } from "./api/vehicleApi";
 
 function App(props) {
-  const [vehicles, setVehicles] = useState([]);
+  const [vehicles, dispatch] = useReducer(vehicleReducer, []);
   const [language, setLanguage] = useState("es");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -20,7 +21,7 @@ function App(props) {
   // This is equivalent to componentDidMount
   useEffect(() => {
     getVehicles().then(_vehicles => {
-      setVehicles(_vehicles);
+      dispatch({ type: "load", vehicles: _vehicles });
       setIsLoading(false);
     });
   }, []);
@@ -28,16 +29,15 @@ function App(props) {
   function handleDelete(vehicleId) {
     // Optimistic delete. Assuming the delete will succeed.
     const vehiclesCopy = [...vehicles];
-    const newVehicles = vehicles.filter(vehicle => vehicle.id !== vehicleId);
     // This is an async call. React sets state in an async manner. Set state sometime in the near future.
-    setVehicles(newVehicles);
+    dispatch({ type: "delete", vehicleId: vehicleId });
     toast.info("Vehicle delete in progress...");
     deleteVehicle(vehicleId)
       .then(() => {
         toast.success("Vehicle deleted");
       })
       .catch(error => {
-        setVehicles([...vehiclesCopy]);
+        dispatch({ type: "load", vehicles: [...vehiclesCopy] });
         toast.error("Oops. Delete failed. Error:" + error.message);
       });
   }
@@ -45,15 +45,7 @@ function App(props) {
   function handleSave(vehicle) {
     setIsSaving(true);
     return saveVehicle(vehicle).then(savedVehicle => {
-      if (vehicle.id) {
-        // Iterate over vehicles, and replace the savedVehicle in the array.
-        const updatedVehicles = vehicles.map(vehicle =>
-          vehicle.id === savedVehicle.id ? savedVehicle : vehicle
-        );
-        setVehicles(updatedVehicles);
-      } else {
-        setVehicles([...vehicles, savedVehicle]);
-      }
+      dispatch({ type: vehicle.id ? "edit" : "add", vehicle: savedVehicle });
       setIsSaving(false);
       toast.success("Vehicle saved.");
     });
@@ -80,8 +72,7 @@ function App(props) {
               isSaving={isSaving}
               onSave={handleSave}
               vehicles={vehicles}
-              history={props.history}
-              match={props.match}
+              {...props}
             />
           )}
         />
