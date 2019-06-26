@@ -12,8 +12,9 @@ function ManageVehicle(props) {
 
   const [errors, setErrors] = useState({});
 
+  const { vehicleId } = props.match.params;
+
   useEffect(() => {
-    const { vehicleId } = props.match.params;
     if (vehicleId) {
       // Set vehicle if we received one, otherwise redirect to 404 page.
       const _vehicle = props.vehicles.find(
@@ -21,7 +22,7 @@ function ManageVehicle(props) {
       );
       _vehicle ? setVehicle(_vehicle) : props.history.push("/404");
     }
-  }, [props.history, props.match.params, props.vehicles]);
+  }, [props.history, props.vehicles, vehicleId]);
 
   function handleChange({ target }) {
     // const newVehicle = produce(vehicle, draftState => {
