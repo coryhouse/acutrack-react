@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TextInput should render 1`] = `
+<div>
+  <label
+    htmlFor="ID"
+  >
+    Example label
+  </label>
+  <br
+    data-testid="break"
+  />
+  <input
+    id="ID"
+    name="name"
+    onChange={[Function]}
+    required={false}
+    value="Example value"
+  />
+  
+</div>
+`;

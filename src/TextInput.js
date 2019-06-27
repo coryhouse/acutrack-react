@@ -6,7 +6,7 @@ class TextInput extends React.Component {
     return (
       <div>
         <label htmlFor={this.props.id}>{this.props.label}</label>
-        <br />
+        <br data-testid="break" />
         <input
           id={this.props.id}
           type={this.props.type}
