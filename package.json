@@ -25,7 +25,8 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "chromatic": "CHROMATIC_APP_CODE=c6caxetvm5s chromatic test"
+    "chromatic": "CHROMATIC_APP_CODE=c6caxetvm5s chromatic test",
+    "cy": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
