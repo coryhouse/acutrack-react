@@ -38,12 +38,29 @@ describe("TextInput", () => {
     getByTestId("break");
   });
 
-  it("should render", () => {
+  it("should not render an error when an error isn't passed", () => {
     const tree = renderer
       .create(
         <TextInput
           label="Example label"
           id="ID"
+          value="Example value"
+          name="name"
+          onChange={() => {}}
+        />
+      )
+      .toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  it("should render an error when passed an error", () => {
+    const tree = renderer
+      .create(
+        <TextInput
+          label="Example label"
+          id="ID"
+          error="Example error"
           value="Example value"
           name="name"
           onChange={() => {}}

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TextInput should render 1`] = `
+exports[`TextInput should not render an error when an error isn't passed 1`] = `
 <div>
   <label
     htmlFor="ID"
@@ -18,5 +18,34 @@ exports[`TextInput should render 1`] = `
     value="Example value"
   />
   
+</div>
+`;
+
+exports[`TextInput should render an error when passed an error 1`] = `
+<div>
+  <label
+    htmlFor="ID"
+  >
+    Example label
+  </label>
+  <br
+    data-testid="break"
+  />
+  <input
+    id="ID"
+    name="name"
+    onChange={[Function]}
+    required={false}
+    value="Example value"
+  />
+  <p
+    style={
+      Object {
+        "color": "red",
+      }
+    }
+  >
+    Example error
+  </p>
 </div>
 `;

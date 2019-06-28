@@ -5,8 +5,12 @@ class TextInput extends React.Component {
   render() {
     return (
       <div>
-        <label htmlFor={this.props.id}>{this.props.label}</label>
-        <br data-testid="break" />
+        {this.props.label && (
+          <>
+            <label htmlFor={this.props.id}>{this.props.label}</label>
+            <br data-testid="break" />
+          </>
+        )}
         <input
           id={this.props.id}
           type={this.props.type}
@@ -23,7 +27,7 @@ class TextInput extends React.Component {
 }
 
 TextInput.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.oneOf(["email", "text", "number", "password"]),
