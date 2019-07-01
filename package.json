@@ -26,7 +26,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "chromatic": "CHROMATIC_APP_CODE=c6caxetvm5s chromatic test",
-    "cy": "cypress open"
+    "cy": "run-p start cypress:open",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -49,6 +50,7 @@
     "@storybook/addon-links": "^5.1.9",
     "@storybook/addons": "^5.1.9",
     "@storybook/react": "^5.1.9",
+    "@testing-library/cypress": "^4.0.4",
     "storybook-chromatic": "^1.4.0"
   }
 }

@@ -34,7 +34,7 @@ function Vehicles(props) {
             {props.vehicles.map(vehicle => (
               <tr key={vehicle.id}>
                 <td>
-                  <button onClick={() => props.onDeleteClick(vehicle.id)}>
+                  <button aria-label={`Delete ${vehicle.make} ${vehicle.model}`} onClick={() => props.onDeleteClick(vehicle.id)}>
                     Delete
                   </button>
                 </td>
