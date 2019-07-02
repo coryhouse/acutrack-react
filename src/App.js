@@ -26,20 +26,19 @@ function App(props) {
     });
   }, []);
 
-  function handleDelete(vehicleId) {
+  async function handleDelete(vehicleId) {
     // Optimistic delete. Assuming the delete will succeed.
     const vehiclesCopy = [...vehicles];
     // This is an async call. React sets state in an async manner. Set state sometime in the near future.
     dispatch({ type: "delete", vehicleId: vehicleId });
     toast.info("Vehicle delete in progress...");
-    deleteVehicle(vehicleId)
-      .then(() => {
-        toast.success("Vehicle deleted");
-      })
-      .catch(error => {
-        dispatch({ type: "load", vehicles: [...vehiclesCopy] });
-        toast.error("Oops. Delete failed. Error:" + error.message);
-      });
+    try {
+      await deleteVehicle(vehicleId);
+      toast.success("Vehicle deleted");
+    } catch (error) {
+      dispatch({ type: "load", vehicles: [...vehiclesCopy] });
+      toast.error("Oops. Delete failed. Error:" + error.message);
+    }
   }
 
   function handleSave(vehicle) {

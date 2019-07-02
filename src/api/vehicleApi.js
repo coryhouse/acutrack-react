@@ -1,11 +1,13 @@
-export function getVehicles() {
-  return fetch("http://localhost:3001/vehicles").then(response => {
+export async function getVehicles() {
+  // This next line makes an async call, so pause here until the call is complete. Store the result in response.
+  try {
+    const response = await fetch("http://localhost:3001/vehicles");
     if (!response.ok) throw new Error("Network response was not okay.");
-    return response.json().catch(error => {
-      console.error(error);
-      throw error;
-    });
-  });
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export function getVehicle(vehicleId) {
@@ -18,16 +20,20 @@ export function getVehicle(vehicleId) {
   });
 }
 
-export function deleteVehicle(vehicleId) {
-  return fetch("http://localhost:3001/vehicles/" + vehicleId, {
-    method: "DELETE"
-  }).then(response => {
+export async function deleteVehicle(vehicleId) {
+  try {
+    const response = await fetch(
+      "http://localhost:3001/vehicles/" + vehicleId,
+      {
+        method: "DELETE"
+      }
+    );
     if (!response.ok) throw new Error("Network response was not okay.");
-    return response.json().catch(error => {
-      console.error(error);
-      throw error;
-    });
-  });
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
 
 export function saveVehicle(vehicle) {
