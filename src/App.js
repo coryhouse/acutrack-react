@@ -1,16 +1,19 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, Suspense } from "react";
 import { vehicleReducer } from "./vehicleReducer";
 import Login from "./Login";
 import LanguageContext from "./LanguageContext";
 import { Route, Switch } from "react-router-dom";
 import Home from "./Home";
 import Nav from "./Nav";
-import Vehicles from "./Vehicles";
 import ManageVehicle from "./ManageVehicle";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import PageNotFound from "./PageNotFound";
 import { getVehicles, deleteVehicle, saveVehicle } from "./api/vehicleApi";
+import Loading from "./Loading";
+
+// Lazy load the vehicle component. Place the component in a separate bundle
+const Vehicles = React.lazy(() => import("./Vehicles"));
 
 function App(props) {
   const [vehicles, dispatch] = useReducer(vehicleReducer, []);
@@ -75,16 +78,18 @@ function App(props) {
             />
           )}
         />
-        <Route
-          path="/vehicles"
-          render={props => (
-            <Vehicles
-              vehicles={vehicles}
-              isLoading={isLoading}
-              onDeleteClick={handleDelete}
-            />
-          )}
-        />
+        <Suspense fallback={<Loading />}>
+          <Route
+            path="/vehicles"
+            render={props => (
+              <Vehicles
+                vehicles={vehicles}
+                isLoading={isLoading}
+                onDeleteClick={handleDelete}
+              />
+            )}
+          />
+        </Suspense>
         <Route path="/404" component={PageNotFound} />
         <Route component={PageNotFound} />
       </Switch>
